@@ -1,0 +1,67 @@
+<!DOCTYPE html><html lang="es"><head><meta charset="UTF-8"><title>Test de Mouse</title><style>body{font-family:Arial,sans-serif;background:#121212;color:#fff;margin:0;display:flex;flex-direction:column;align-items:center;justify-content:center;height:100vh;user-select:none}h1{margin-bottom:20px}.container{display:flex;gap:40px;align-items:center}.button-counts{display:grid;grid-template-columns:repeat(2,200px);gap:20px}.button{background:#1e1e1e;padding:20px;border-radius:10px;text-align:center;box-shadow:0 0 10px #333}.button span{display:block;font-size:24px;margin-top:10px;color:#4caf50}.mouse-visual{width:150px;height:250px;background:#1a1a1a;border-radius:80px;position:relative;box-shadow:inset 0 0 10px #000}.mouse-button{position:absolute;background:#2a2a2a;border-radius:10px;transition:background .2s}.active{background:#0d47a1!important}.left{top:20px;left:10px;width:50px;height:90px;border-top-left-radius:80px}.right{top:20px;right:10px;width:50px;height:90px;border-top-right-radius:80px}.middle{top:45px;left:60px;width:30px;height:40px;border-radius:15px}.back{top:130px;left:-20px;width:20px;height:40px;border-radius:5px}.forward{top:180px;left:-20px;width:20px;height:40px;border-radius:5px}.scroll-down,.scroll-up{position:absolute;left:60px;width:30px;height:20px;background:#2a2a2a;border-radius:5px}.scroll-up{top:90px}.scroll-down{top:110px}.reset-container{margin-top:30px}.reset-button{padding:10px 20px;font-size:16px;background:#0d47a1;color:#fff;border:none;border-radius:10px;cursor:pointer;box-shadow:0 0 10px #0d47a1;transition:background .2s}.reset-button:hover{background:#1565c0}footer{position:absolute;bottom:10px;font-size:12px;color:#888}</style></head><body><h1>Test de Botones del Mouse</h1><div class="container"><div class="mouse-visual"><div class="mouse-button left" id="v-left"></div><div class="mouse-button right" id="v-right"></div><div class="mouse-button middle" id="v-middle"></div><div class="mouse-button back" id="v-back"></div><div class="mouse-button forward" id="v-forward"></div><div class="mouse-button scroll-up" id="v-scroll-up"></div><div class="mouse-button scroll-down" id="v-scroll-down"></div></div><div><div class="button-counts"><div class="button">Izquierdo<span id="left">0</span></div><div class="button">Derecho<span id="right">0</span></div><div class="button">Ruedita (Click Medio)<span id="middle">0</span></div><div class="button">Lateral Atrás<span id="back">0</span></div><div class="button">Lateral Adelante<span id="forward">0</span></div><div class="button">Scroll Arriba<span id="scrollUp">0</span></div><div class="button">Scroll Abajo<span id="scrollDown">0</span></div></div><div class="reset-container"><button class="reset-button" onclick="resetCounters()">Reiniciar Contadores</button></div></div></div><footer>Presioná o mové los botones del mouse para ver si funcionan</footer><script>const counters = {
+      left: 0,
+      right: 0,
+      middle: 0,
+      back: 0,
+      forward: 0,
+      scrollUp: 0,
+      scrollDown: 0
+    };
+
+    const updateUI = () => {
+      for (const key in counters) {
+        document.getElementById(key).textContent = counters[key];
+      }
+    };
+
+    const flashVisual = (id) => {
+      const el = document.getElementById(id);
+      el.classList.add('active');
+      setTimeout(() => el.classList.remove('active'), 150);
+    };
+
+    window.addEventListener('mousedown', (e) => {
+      switch (e.button) {
+        case 0:
+          counters.left++;
+          flashVisual('v-left');
+          break;
+        case 1:
+          counters.middle++;
+          flashVisual('v-middle');
+          break;
+        case 2:
+          counters.right++;
+          flashVisual('v-right');
+          break;
+        case 3:
+          counters.back++;
+          flashVisual('v-back');
+          break;
+        case 4:
+          counters.forward++;
+          flashVisual('v-forward');
+          break;
+      }
+      updateUI();
+    });
+
+    window.addEventListener('wheel', (e) => {
+      if (e.deltaY < 0) {
+        counters.scrollUp++;
+        flashVisual('v-scroll-up');
+      } else {
+        counters.scrollDown++;
+        flashVisual('v-scroll-down');
+      }
+      updateUI();
+    });
+
+    function resetCounters() {
+      for (const key in counters) {
+        counters[key] = 0;
+      }
+      updateUI();
+    }
+
+    window.addEventListener('contextmenu', e => e.preventDefault());</script></body></html>
