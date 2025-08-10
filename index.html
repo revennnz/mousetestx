@@ -1,67 +1,132 @@
-<!DOCTYPE html><html lang="es"><head><meta charset="UTF-8"><title>Test de Mouse</title><style>body{font-family:Arial,sans-serif;background:#121212;color:#fff;margin:0;display:flex;flex-direction:column;align-items:center;justify-content:center;height:100vh;user-select:none}h1{margin-bottom:20px}.container{display:flex;gap:40px;align-items:center}.button-counts{display:grid;grid-template-columns:repeat(2,200px);gap:20px}.button{background:#1e1e1e;padding:20px;border-radius:10px;text-align:center;box-shadow:0 0 10px #333}.button span{display:block;font-size:24px;margin-top:10px;color:#4caf50}.mouse-visual{width:150px;height:250px;background:#1a1a1a;border-radius:80px;position:relative;box-shadow:inset 0 0 10px #000}.mouse-button{position:absolute;background:#2a2a2a;border-radius:10px;transition:background .2s}.active{background:#0d47a1!important}.left{top:20px;left:10px;width:50px;height:90px;border-top-left-radius:80px}.right{top:20px;right:10px;width:50px;height:90px;border-top-right-radius:80px}.middle{top:45px;left:60px;width:30px;height:40px;border-radius:15px}.back{top:130px;left:-20px;width:20px;height:40px;border-radius:5px}.forward{top:180px;left:-20px;width:20px;height:40px;border-radius:5px}.scroll-down,.scroll-up{position:absolute;left:60px;width:30px;height:20px;background:#2a2a2a;border-radius:5px}.scroll-up{top:90px}.scroll-down{top:110px}.reset-container{margin-top:30px}.reset-button{padding:10px 20px;font-size:16px;background:#0d47a1;color:#fff;border:none;border-radius:10px;cursor:pointer;box-shadow:0 0 10px #0d47a1;transition:background .2s}.reset-button:hover{background:#1565c0}footer{position:absolute;bottom:10px;font-size:12px;color:#888}</style></head><body><h1>Test de Botones del Mouse</h1><div class="container"><div class="mouse-visual"><div class="mouse-button left" id="v-left"></div><div class="mouse-button right" id="v-right"></div><div class="mouse-button middle" id="v-middle"></div><div class="mouse-button back" id="v-back"></div><div class="mouse-button forward" id="v-forward"></div><div class="mouse-button scroll-up" id="v-scroll-up"></div><div class="mouse-button scroll-down" id="v-scroll-down"></div></div><div><div class="button-counts"><div class="button">Izquierdo<span id="left">0</span></div><div class="button">Derecho<span id="right">0</span></div><div class="button">Ruedita (Click Medio)<span id="middle">0</span></div><div class="button">Lateral Atrás<span id="back">0</span></div><div class="button">Lateral Adelante<span id="forward">0</span></div><div class="button">Scroll Arriba<span id="scrollUp">0</span></div><div class="button">Scroll Abajo<span id="scrollDown">0</span></div></div><div class="reset-container"><button class="reset-button" onclick="resetCounters()">Reiniciar Contadores</button></div></div></div><footer>Presioná o mové los botones del mouse para ver si funcionan</footer><script>const counters = {
-      left: 0,
-      right: 0,
-      middle: 0,
-      back: 0,
-      forward: 0,
-      scrollUp: 0,
-      scrollDown: 0
-    };
+<!DOCTYPE html><html lang="es"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Tester de Mouse</title><style>:root{--bg:#0f1216;--card:#151a21;--muted:#9aa4b2;--text:#e8eef7;--accent:#59a9ff;--ok:#5ee1a7;--ring:rgba(89,169,255,.35)}*{box-sizing:border-box}body,html{height:100%;overflow:hidden;overscroll-behavior:none}body{margin:0;background:radial-gradient(1200px 800px at 20% 0,#10151c,#0b0e12),linear-gradient(180deg,#0f1216,#0d1014);color:var(--text);font:16px/1.5 system-ui,-apple-system,Segoe UI,Roboto,Ubuntu,"Helvetica Neue",Arial,"Noto Sans","Liberation Sans",sans-serif;user-select:none;-webkit-user-select:none}.wrap{max-width:1100px;margin:24px auto;padding:20px}header{display:flex;align-items:center;justify-content:space-between;gap:12px;margin-bottom:18px}h1{font-size:22px;margin:0}.hint{color:var(--muted);font-size:14px}.grid{display:grid;grid-template-columns:1.1fr .9fr;gap:18px}@media (max-width:860px){.grid{grid-template-columns:1fr}}.card{background:linear-gradient(180deg,rgba(255,255,255,.02),rgba(255,255,255,0));border:1px solid rgba(255,255,255,.05);border-radius:16px;box-shadow:0 8px 30px rgba(0,0,0,.35)}.card.pad{padding:18px}.mouse{width:100%;aspect-ratio:5/6;display:grid;place-items:center}.mouse-shell{position:relative;width:min(420px,92%);aspect-ratio:3/5;border-radius:120px;background:radial-gradient(80% 100% at 50% 0,#232a34,#171c23);border:1px solid rgba(255,255,255,.06);box-shadow:inset 0 12px 30px rgba(0,0,0,.35),0 10px 40px rgba(0,0,0,.45)}.zone{position:absolute;inset:0}.btn{position:absolute;background:linear-gradient(180deg,#1c2330,#141924);border:1px solid rgba(255,255,255,.06);transition:transform .05s ease,box-shadow .1s ease,background .2s ease;box-shadow:inset 0 4px 10px rgba(0,0,0,.45)}.btn.pressed{transform:translateY(1px);box-shadow:inset 0 2px 8px rgba(0,0,0,.75),0 0 0 6px var(--ring);background:linear-gradient(180deg,#263554,#172033)}.btn.left,.btn.right{width:44%;height:40%;top:7%;border-radius:30px 30px 18px 18px}.btn.left{left:5%}.btn.right{right:5%}.btn.middle{width:14%;height:28%;top:11%;left:50%;translate:-50% 0;border-radius:16px;background:linear-gradient(180deg,#2a3344,#171e2a)}.wheel-track{position:absolute;width:6px;height:72%;left:50%;top:14%;translate:-50% 0;background:#0c0f14;border-radius:3px;opacity:.25}.wheel-ind{position:absolute;left:50%;translate:-50% 0;width:22px;height:22px;border-radius:6px;border:1px solid rgba(255,255,255,.12);background:rgba(255,255,255,.06);display:grid;place-items:center;font-size:14px;line-height:1;opacity:.25;transition:opacity .12s,transform .08s;pointer-events:none}.wheel-ind.up{top:6%}.wheel-ind.down{top:42%}.wheel-ind.flash{opacity:1;transform:scale(1.06);box-shadow:0 0 0 6px var(--ring)}.btn.side-bottom,.btn.side-top{width:18%;height:16%;right:6%;border-radius:12px}.btn.side-top{top:38%}.btn.side-bottom{top:56%}.counts{display:grid;gap:10px}.row{display:grid;grid-template-columns:1fr auto;gap:12px;align-items:center;padding:10px 12px;background:rgba(255,255,255,.03);border:1px solid rgba(255,255,255,.06);border-radius:12px}.badge{padding:2px 8px;border-radius:999px;font-size:12px;border:1px solid rgba(255,255,255,.12);background:rgba(255,255,255,.06);color:var(--muted)}.val{font-variant-numeric:tabular-nums}.controls{display:flex;gap:10px;flex-wrap:wrap;margin-top:12px}button{appearance:none;border:1px solid rgba(255,255,255,.12);background:linear-gradient(180deg,#1a212c,#121722);color:var(--text);padding:10px 14px;border-radius:10px;cursor:pointer;font-weight:600;transition:transform .05s,box-shadow .15s,background .2s}button:hover{box-shadow:0 8px 24px rgba(0,0,0,.35)}button:active{transform:translateY(1px)}.ok{border-color:rgba(94,225,167,.3)}</style></head><body><div class="wrap"><header><div><h1>Tester de Mouse</h1><div class="hint">Clic, mantener, scroll y laterales (bloqueados). Podés invertir laterales si tu mouse los reporta al revés.</div></div><div class="hint">Botones: 0,1,2,3,4 + rueda</div></header><div class="grid"><div class="card mouse"><div class="mouse-shell" aria-label="Visualización del mouse"><div class="wheel-track"></div><div class="wheel-ind up" id="indUp">▲</div><div class="wheel-ind down" id="indDown">▼</div><div class="zone"><div class="btn left" id="btn-left" title="Izquierdo (0)"></div><div class="btn right" id="btn-right" title="Derecho (2)"></div><div class="btn middle" id="btn-middle" title="Rueda / Medio (1)"></div><div class="btn side-top" id="btn-side-top" title="Lateral físico ARRIBA"></div><div class="btn side-bottom" id="btn-side-bottom" title="Lateral físico ABAJO"></div></div></div></div><div class="card pad"><div class="counts"><div class="row"><div>Izquierdo<span class="badge">button 0</span></div><div class="val" id="c-0">0</div></div><div class="row"><div>Medio / Rueda (click)<span class="badge">button 1</span></div><div class="val" id="c-1">0</div></div><div class="row"><div>Derecho<span class="badge">button 2</span></div><div class="val" id="c-2">0</div></div><div class="row"><div>Lateral Atrás<span class="badge">button 3</span></div><div class="val" id="c-3">0</div></div><div class="row"><div>Lateral Adelante<span class="badge">button 4</span></div><div class="val" id="c-4">0</div></div><div class="row"><div><strong>Scroll arriba</strong><span class="badge">rueda ▲</span></div><div class="val" id="c-scroll-up">0</div></div><div class="row"><div><strong>Scroll abajo</strong><span class="badge">rueda ▼</span></div><div class="val" id="c-scroll-down">0</div></div></div><div class="controls"><button id="reset" class="ok">Reiniciar contador</button><button id="toggleLock">Desactivar bloqueo laterales</button><button id="toggleInvert">Invertir laterales: OFF</button></div></div></div></div><script>(()=>{
+  // --- Estado ---
+  const counts = {0:0,1:0,2:0,3:0,4:0, scrollUp:0, scrollDown:0};
+  const pressed = new Set();
 
-    const updateUI = () => {
-      for (const key in counters) {
-        document.getElementById(key).textContent = counters[key];
-      }
-    };
+  // Preferencia: invertir laterales (persistente)
+  let invertSides = (localStorage.getItem("mouseTester_invertSides") === "1");
 
-    const flashVisual = (id) => {
-      const el = document.getElementById(id);
-      el.classList.add('active');
-      setTimeout(() => el.classList.remove('active'), 150);
-    };
+  // Bloqueo de atrás/adelante con laterales
+  let lockNav = true;
+  function pushBlockState(){ try{ history.pushState({mouseTester:true,ts:Date.now()},"",location.href); }catch{} }
+  window.addEventListener("popstate", ()=>{ if(lockNav) pushBlockState(); });
+  // Empujamos dos estados para amortiguar
+  pushBlockState(); pushBlockState();
 
-    window.addEventListener('mousedown', (e) => {
-      switch (e.button) {
-        case 0:
-          counters.left++;
-          flashVisual('v-left');
-          break;
-        case 1:
-          counters.middle++;
-          flashVisual('v-middle');
-          break;
-        case 2:
-          counters.right++;
-          flashVisual('v-right');
-          break;
-        case 3:
-          counters.back++;
-          flashVisual('v-back');
-          break;
-        case 4:
-          counters.forward++;
-          flashVisual('v-forward');
-          break;
-      }
-      updateUI();
-    });
+  // --- UI refs ---
+  const el = (s)=>document.querySelector(s);
+  const valEls = {
+    0:el("#c-0"), 1:el("#c-1"), 2:el("#c-2"), 3:el("#c-3"), 4:el("#c-4"),
+    scrollUp:el("#c-scroll-up"), scrollDown:el("#c-scroll-down")
+  };
+  const indUp = el("#indUp"), indDown = el("#indDown");
+  const btnTop = el("#btn-side-top"), btnBottom = el("#btn-side-bottom");
+  const toggleLockBtn = el("#toggleLock");
+  const toggleInvertBtn = el("#toggleInvert");
 
-    window.addEventListener('wheel', (e) => {
-      if (e.deltaY < 0) {
-        counters.scrollUp++;
-        flashVisual('v-scroll-up');
-      } else {
-        counters.scrollDown++;
-        flashVisual('v-scroll-down');
-      }
-      updateUI();
-    });
-
-    function resetCounters() {
-      for (const key in counters) {
-        counters[key] = 0;
-      }
-      updateUI();
+  // --- Util ---
+  function update(){
+    [0,1,2,3,4].forEach(b => valEls[b].textContent = counts[b]);
+    valEls.scrollUp.textContent = counts.scrollUp;
+    valEls.scrollDown.textContent = counts.scrollDown;
+  }
+  function flash(elm){
+    elm.classList.add("flash");
+    clearTimeout(elm._t);
+    elm._t = setTimeout(()=> elm.classList.remove("flash"), 120);
+  }
+  function getVisualEl(button){
+    switch(button){
+      case 0: return el("#btn-left");
+      case 1: return el("#btn-middle");
+      case 2: return el("#btn-right");
+      case 3: return invertSides ? btnBottom : btnTop;   // atrás → arriba por defecto
+      case 4: return invertSides ? btnTop : btnBottom;   // adelante → abajo por defecto
+      default: return null;
     }
+  }
+  function setPressedVisual(button, on){
+    const target = getVisualEl(button);
+    if (!target) return;
+    target.classList.toggle("pressed", !!on);
+  }
+  function cancel(e){ e.preventDefault?.(); e.stopPropagation?.(); return false; }
 
-    window.addEventListener('contextmenu', e => e.preventDefault());</script></body></html>
+  // --- Prevenciones globales ---
+  // Evitar menú contextual (clic derecho) y clic medio/laterales que abren/navegan
+  window.addEventListener("contextmenu", cancel, {capture:true});
+  window.addEventListener("auxclick", cancel, {capture:true});
+  window.addEventListener("mousedown", cancel, {capture:true}); // evita select/texto y default raros
+
+  // Evitar scroll de la página y contar rueda
+  window.addEventListener("wheel", (e)=>{
+    e.preventDefault(); e.stopPropagation();
+    if (e.deltaY < 0){ counts.scrollUp++; flash(indUp); }
+    else if (e.deltaY > 0){ counts.scrollDown++; flash(indDown); }
+    update();
+  }, {capture:true, passive:false});
+
+  // --- Pointer events (clic/hold) ---
+  function onPointerDown(e){
+    if (e.button >= 0 && e.button <= 4){
+      cancel(e);
+      pressed.add(e.button);
+      setPressedVisual(e.button, true);
+      counts[e.button]++; update();
+      if (e.target?.setPointerCapture){ try{ e.target.setPointerCapture(e.pointerId); }catch{} }
+    }
+  }
+  function onPointerUp(e){
+    if (pressed.has(e.button)){
+      pressed.delete(e.button);
+      setPressedVisual(e.button, false);
+      cancel(e);
+    }
+  }
+  function onPointerCancel(){
+    if (!pressed.size) return;
+    [0,1,2,3,4].forEach(b => setPressedVisual(b, false));
+    pressed.clear();
+  }
+
+  window.addEventListener("pointerdown", onPointerDown, {capture:true});
+  window.addEventListener("pointerup", onPointerUp, {capture:true});
+  window.addEventListener("pointercancel", onPointerCancel, {capture:true});
+
+  // --- Botones UI ---
+  function refreshLockText(){ toggleLockBtn.textContent = lockNav ? "Desactivar bloqueo laterales" : "Activar bloqueo laterales"; }
+  function refreshInvertText(){ toggleInvertBtn.textContent = `Invertir laterales: ${invertSides ? "ON" : "OFF"}`; }
+  toggleLockBtn.addEventListener("click", ()=>{
+    lockNav = !lockNav; refreshLockText();
+    if (lockNav){ pushBlockState(); pushBlockState(); }
+  });
+  toggleInvertBtn.addEventListener("click", ()=>{
+    invertSides = !invertSides;
+    localStorage.setItem("mouseTester_invertSides", invertSides ? "1" : "0");
+    refreshInvertText();
+    // Si había algo presionado, apago los indicadores por las dudas
+    [0,1,2,3,4].forEach(b => setPressedVisual(b, false));
+  });
+  el("#reset").addEventListener("click", ()=>{
+    [0,1,2,3,4].forEach(b => counts[b]=0);
+    counts.scrollUp = 0; counts.scrollDown = 0;
+    update();
+  });
+
+  refreshLockText(); refreshInvertText();
+  update();
+
+  // Soporte táctil: tocar zonas simula códigos de botón
+  const touchMap = new Map([
+    [el("#btn-left"),0],[el("#btn-middle"),1],[el("#btn-right"),2],
+    [btnTop,3],[btnBottom,4]
+  ]);
+  for (const [zone, code] of touchMap.entries()){
+    zone.addEventListener("pointerdown", (e)=>{
+      if (e.pointerType==="touch"||e.pointerType==="pen"){ e.button=code; onPointerDown(e); }
+    });
+    zone.addEventListener("pointerup", (e)=>{
+      if (e.pointerType==="touch"||e.pointerType==="pen"){ e.button=code; onPointerUp(e); }
+    });
+  }
+})();</script></body></html>
